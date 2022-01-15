@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 function ProductList() {
     const [data, setData] = useState([]);
+    const [count, setCount] = useState(1);
 
     useEffect(() => {
         getData();
