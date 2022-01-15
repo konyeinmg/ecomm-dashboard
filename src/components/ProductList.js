@@ -5,12 +5,24 @@ import { Table } from 'react-bootstrap';
 function ProductList() {
     const [data, setData] = useState([]);
 
-    useEffect(async () => {
+    useEffect(() => {
+        getData();
+    }, []);
+    console.log(data);
+
+    const deleteOperation = async (id) => {
+        let result = await fetch("http://127.0.0.1:8000/api/delete/"+id, {
+            method: 'DELETE'
+        });
+        result = await result.json();
+        getData();
+    }
+
+    const getData = async () => {
         let result = await fetch('http://127.0.0.1:8000/api/list');
         result = await result.json();
         setData(result);
-    }, []);
-    console.log(data);
+    }
 
     return (
         <div>
@@ -24,6 +36,7 @@ function ProductList() {
                         <th>Price</th>
                         <th>Description</th>
                         <th>Image</th>
+                        <th>Operations</th>
                     </tr>
                     {
                         data.map((item) =>
@@ -33,6 +46,7 @@ function ProductList() {
                                 <td>{item.price}</td>
                                 <td>{item.description}</td>
                                 <td><img style={{ width: 100 }} src={"http://127.0.0.1:8000/" + item.file_path} /></td>
+                                <td><span onClick={() => deleteOperation(item.id)} className='delete'>Delete</span></td>
                             </tr>
                         )
                     }
